@@ -1,7 +1,6 @@
-from Inventory import Inventory
+from FileManager import FileManager
 
-filePath = 'data.csv'
-inventory = Inventory()
+fileManager = FileManager()
 
 def showMainMenu():
     userInput = input('Select operation - Add record (1), Search records (2), Edit record (3), Remove record (4), Exit (5): ')
@@ -31,7 +30,7 @@ def showAddMenu():
     artist = input('Enter Artist: ')
     label = input('Enter Label: ')
 
-    inventory.addRecord(id, name, artist, label, filePath)
+    fileManager.addRecord(id, name, artist, label)
 
     print('Record successfully added')
 
@@ -42,7 +41,14 @@ def showEditMenu():
     return
 
 def showRemoveMenu():
-    return
+    while True:
+        try:
+            id = int(input('Enter ID of record to remove: '))
+            break
+        except:
+            print('Invalid input. Enter an integer')
+
+    fileManager.removeRecord(id)
 
 while True:
     showMainMenu()
