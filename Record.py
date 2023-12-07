@@ -19,6 +19,9 @@ class Record:
     
     def getLabel(self):
         return self._label
+    
+    def getRow(self):
+        return self._row
 
     def setId(self, id):
         self._id = id
