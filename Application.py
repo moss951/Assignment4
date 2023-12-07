@@ -1,11 +1,11 @@
 from Record import Record
 
-dataPath = 'data.csv'
+filePath = 'data.csv'
 records = []
 
-records.append(Record(98535, 'Pabio Honey', 'Radiohead', 'EMI'))
+records.append(Record(98535, 'Pabio Honey', 'Radiohead', 'EMI', len(records)))
 
-records[0].setCsvRow(0)
-records[0].appendToFile(dataPath)
+records[0].appendToFile(filePath)
 records[0].setLabel('hi')
-records[0].updateFileRow(dataPath)
+records[0].updateFileRow(filePath)
+records[0].removeFromFile(filePath)

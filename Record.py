@@ -1,7 +1,7 @@
 import csv
 
 class Record:
-    def __init__(self, id, name, artist, label, row=None):
+    def __init__(self, id, name, artist, label, row):
         self._id = id
         self._name = name
         self._artist = artist
@@ -32,7 +32,7 @@ class Record:
     def setLabel(self, label):
         self._label = label
 
-    def setCsvRow(self, row):
+    def setRow(self, row):
         self._row = row
 
     def appendToFile(self, filePath):
@@ -54,6 +54,20 @@ class Record:
                 if i == self._row:
                     writer.writerow([self._id, self._name, self._artist, self._label])
                 else:
+                    writer.writerow(row)
+
+    def removeFromFile(self, filePath):
+        fileData = []
+
+        with open(filePath, 'r', newline='') as file:
+            reader = csv.reader(file)
+            fileData.extend(reader)
+
+        with open(filePath, 'w', newline='') as file:
+            writer = csv.writer(file)
+            
+            for i, row in enumerate(fileData):
+                if i != self._row:
                     writer.writerow(row)
 
             
