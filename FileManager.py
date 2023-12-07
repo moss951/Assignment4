@@ -17,7 +17,20 @@ class FileManager:
 
         return numRecords
     
+    def getRecordById(self, id):
+        with open(self._FILE_PATH, 'r') as file:
+            reader = csv.reader(file)
+
+            for row in reader:
+                if row[0] == str(id):
+                    return row
+                
+        return False
+    
     def addRecord(self, id, name, artist, label):
+        if id <= 0:
+            return False
+
         with open(self._FILE_PATH, 'r') as file:
             reader = csv.reader(file)
 
@@ -30,37 +43,16 @@ class FileManager:
             writer.writerow([id, name, artist, label])
 
         return True
-
-    def getRecordById(self, id):
-        with open(self._FILE_PATH, 'r') as file:
-            reader = csv.reader(file)
-
-            for row in reader:
-                if row[0] == str(id):
-                    return row
-                
-        return False
                     
-    def searchRecords(self, field, value):
+    def searchRecords(self, searchMethod, value):
         foundRecords = []
 
         with open(self._FILE_PATH, 'r') as file:
             reader = csv.reader(file)
 
             for row in reader:
-                if field == '1':
-                    if row[0] == str(value):
-                        foundRecords.append(row)
-                        break
-                elif field == '2':
-                    if row[1] == value:
-                        foundRecords.append(row)
-                elif field == '3':
-                    if row[2] == value:
-                        foundRecords.append(row)
-                elif field == '4':
-                    if row[3] == value:
-                        foundRecords.append(row)
+                if row[searchMethod - 1] == value:
+                    foundRecords.append(row)
                 
         return foundRecords
     
@@ -76,13 +68,13 @@ class FileManager:
 
             for row in reader:
                 if row[0] == record[0]:
-                    if fieldIndex == '1':
+                    if fieldIndex == 1:
                         writer.writerow([newValue, row[1], row[2], row[3]])
-                    elif fieldIndex == '2':
+                    elif fieldIndex == 2:
                         writer.writerow([row[0], newValue, row[2], row[3]])
-                    elif fieldIndex == '3':
+                    elif fieldIndex == 3:
                         writer.writerow([row[0], row[1], newValue, row[3]])
-                    elif fieldIndex == '4':
+                    elif fieldIndex == 4:
                         writer.writerow([row[0], row[1], row[2], newValue])
                     else:
                         return False

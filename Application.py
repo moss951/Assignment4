@@ -9,9 +9,22 @@ def promptInt(message):
         except:
             print('Invalid input. Enter an integer')
 
+def promptSelection(message, min, max):
+    while True:
+        try: 
+            selection = int(input(message))
+        except:
+            print('Invalid input. Enter an integer')
+            continue
+
+        if selection >= min and selection <= max:
+            return selection
+        else:
+            print('Invalid input. Operation not in range')
+
 def displaySearchResult(foundRecords):
     if foundRecords != []:
-        print('Found Records:')
+        print('Found Record(s):')
 
         for i in range(len(foundRecords)):
             print('ID: ' + foundRecords[i][0] + ', Name: ' + foundRecords[i][1] + ', Artist: ' + foundRecords[i][2] + ', Label: ' + foundRecords[i][3])
@@ -19,30 +32,21 @@ def displaySearchResult(foundRecords):
         print('No records found')
 
 def showMainMenu():
-    userInput = input('Select operation - Add record (1), Search records (2), Edit record (3), Remove record (4), Exit (5): ')
+    operation = promptSelection('Select operation - Add record (1), Search records (2), Edit record (3), Remove record (4), Exit (5): ', 1, 5)
 
-    if userInput == '1':
+    if operation == 1:
         showAddMenu()
-    elif userInput == '2':
+    elif operation == 2:
         showSearchMenu()
-    elif userInput == '3':
+    elif operation == 3:
         showEditMenu()
-    elif userInput == '4':
+    elif operation == 4:
         showRemoveMenu()
-    elif userInput == '5':
+    elif operation == 5:
         quit()
-    else:
-        print('Invalid input')
 
 def showAddMenu():
-    while True:
-        id = promptInt('Enter ID: ')
-
-        if id >= 0:
-            break
-        else:
-            print('Invalid input. Enter an integer that is 0 or greater')
-
+    id = promptInt('Enter ID: ')
     name = input('Enter Name: ')
     artist = input('Enter Artist: ')
     label = input('Enter Label: ')
@@ -50,17 +54,18 @@ def showAddMenu():
     if fileManager.addRecord(id, name, artist, label):
         print('Record successfully added')
     else:
-        print('Addition failed. Record with desired ID already exists')
+        print('Addition failed. Record with desired ID already exists, or an invalid ID was chosen (0 or less)')
 
 def showSearchMenu():
-    userInput = input('Search for records by - ID (1), Name (2), Artist (3), Label (4): ')
+    searchMethod = promptSelection('Search for records by - ID (1), Name (2), Artist (3), Label (4): ', 1, 4)
+    fieldValue = input('Enter field value: ')
 
-    foundRecords = fileManager.searchRecords(userInput, input('Enter field value: '))
+    foundRecords = fileManager.searchRecords(searchMethod, fieldValue)
     displaySearchResult(foundRecords)
 
 def showEditMenu():
     id = promptInt('Enter ID of record to edit: ')
-    fieldId = input('Enter field to edit - ID (1), Name (2), Artist (3), Label (4): ')
+    fieldId = promptSelection('Enter field to edit - ID (1), Name (2), Artist (3), Label (4): ', 1, 4)
     newValue = input('Enter new field value: ')
 
     if fileManager.editRecord(id, fieldId, newValue) == False:
