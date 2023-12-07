@@ -47,37 +47,24 @@ def showAddMenu():
     artist = input('Enter Artist: ')
     label = input('Enter Label: ')
 
-    fileManager.addRecord(id, name, artist, label)
-
-    print('Record successfully added')
+    if fileManager.addRecord(id, name, artist, label):
+        print('Record successfully added')
+    else:
+        print('Addition failed. Record with desired ID already exists')
 
 def showSearchMenu():
-    userInput = input('Search for records by - ID (1), Name (2), Artist (3), Label (4), Exit (5): ')
+    userInput = input('Search for records by - ID (1), Name (2), Artist (3), Label (4): ')
 
-    if userInput == '1':
-        id = promptInt('Enter ID: ')
-        foundRecord = fileManager.getRecordById(id)
-
-        if foundRecord != []:
-            print('ID: ' + foundRecord[0] + ', Name: ' + foundRecord[1] + ', Artist: ' + foundRecord[2] + ', Label: ' + foundRecord[3])
-        else:
-            print('No records found')
-    elif userInput == '2':
-        foundRecords = fileManager.searchRecordsByName(input('Enter name: '))
-        displaySearchResult(foundRecords)
-    elif userInput == '3':
-        foundRecords = fileManager.searchRecordsByArtist(input('Enter artist: '))
-        displaySearchResult(foundRecords)
-    elif userInput == '4':
-        foundRecords = fileManager.searchRecordsByLabel(input('Enter label: '))
-        displaySearchResult(foundRecords)
-    elif userInput == '5':
-        return
-    else:
-        print('Invalid input')
+    foundRecords = fileManager.searchRecords(userInput, input('Enter field value: '))
+    displaySearchResult(foundRecords)
 
 def showEditMenu():
-    return
+    id = promptInt('Enter ID of record to edit: ')
+    fieldId = input('Enter field to edit - ID (1), Name (2), Artist (3), Label (4): ')
+    newValue = input('Enter new field value: ')
+
+    if fileManager.editRecord(id, fieldId, newValue) == False:
+        print('Edit failed. Record ID does not exist')
 
 def showRemoveMenu():
     id = promptInt('Enter ID of record to remove: ')
