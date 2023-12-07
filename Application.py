@@ -10,13 +10,13 @@ def promptInt(message):
             print('Invalid input. Enter an integer')
 
 def displaySearchResult(foundRecords):
-    if foundRecords == []:
-        print('No record with this ID was found')
-    else:
+    if foundRecords != []:
         print('Found Records:')
 
         for i in range(len(foundRecords)):
             print('ID: ' + foundRecords[i][0] + ', Name: ' + foundRecords[i][1] + ', Artist: ' + foundRecords[i][2] + ', Label: ' + foundRecords[i][3])
+    else:
+        print('No records found')
 
 def showMainMenu():
     userInput = input('Select operation - Add record (1), Search records (2), Edit record (3), Remove record (4), Exit (5): ')
@@ -35,7 +35,14 @@ def showMainMenu():
         print('Invalid input')
 
 def showAddMenu():
-    id = promptInt('Enter ID: ')
+    while True:
+        id = promptInt('Enter ID: ')
+
+        if id >= 0:
+            break
+        else:
+            print('Invalid input. Enter an integer that is 0 or greater')
+
     name = input('Enter Name: ')
     artist = input('Enter Artist: ')
     label = input('Enter Label: ')
@@ -51,7 +58,10 @@ def showSearchMenu():
         id = promptInt('Enter ID: ')
         foundRecord = fileManager.getRecordById(id)
 
-        print('ID: ' + foundRecord[0] + ', Name: ' + foundRecord[1] + ', Artist: ' + foundRecord[2] + ', Label: ' + foundRecord[3])
+        if foundRecord != []:
+            print('ID: ' + foundRecord[0] + ', Name: ' + foundRecord[1] + ', Artist: ' + foundRecord[2] + ', Label: ' + foundRecord[3])
+        else:
+            print('No records found')
     elif userInput == '2':
         foundRecords = fileManager.searchRecordsByName(input('Enter name: '))
         displaySearchResult(foundRecords)
@@ -71,7 +81,11 @@ def showEditMenu():
 
 def showRemoveMenu():
     id = promptInt('Enter ID of record to remove: ')
-    fileManager.removeRecord(id)
+
+    if fileManager.removeRecord(id):
+        print('Successfully removed record')
+    else:
+        print('Record ID does not exist')
 
 while True:
     showMainMenu()

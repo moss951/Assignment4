@@ -30,7 +30,7 @@ class FileManager:
                 if row[0] == str(id):
                     return row
                 
-        return False
+        return []
 
     def searchRecordsByName(self, name):
         foundRecords = []
@@ -74,6 +74,9 @@ class FileManager:
     def removeRecord(self, id):
         record = self.getRecordById(id)
 
+        if record == []:
+            return False
+
         with open(self._FILE_PATH, 'r') as readFile, open(self._TEMP_FILE_PATH, 'w', newline='') as writeFile:
             reader = csv.reader(readFile)
             writer = csv.writer(writeFile)
@@ -84,3 +87,5 @@ class FileManager:
 
         os.remove(self._FILE_PATH)
         os.rename(self._TEMP_FILE_PATH, self._FILE_PATH)
+
+        return True
