@@ -42,7 +42,6 @@ class Record:
 
     def updateFileRow(self, filePath):
         fileData = []
-        updatedLine = { self._row:[self._id, self._name, self._artist, self._label] }
 
         with open(filePath, 'r', newline='') as file:
             reader = csv.reader(file)
@@ -53,7 +52,7 @@ class Record:
             
             for i, row in enumerate(fileData):
                 if i == self._row:
-                    writer.writerow(updatedLine.get(i))
+                    writer.writerow([self._id, self._name, self._artist, self._label])
                 else:
                     writer.writerow(row)
 
